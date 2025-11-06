@@ -1,0 +1,157 @@
+<h1>users#show</h1>
+<p>名前 : <%= @user.name %></p>
+<p>メールアドレス : <%= @user.email %></p>
+<p>プロフィール : <%= @user.profile %></p>
+
+<% if current_user.id == @user.id %>
+  <%= link_to "編集する", edit_user_registration_path %>
+<% end %>
+
+<h2>ユーザーの投稿一覧</h2>
+<% @user.tweets.each do |t| %>
+  <%= t.user.name %>
+  <%= t.kpop %>
+<% end %>
+
+<% if @user.image.attached? %>
+     <%= image_tag  @user.image, size: '250x200'%>
+<% end %>
+
+<h2>ユーザーがいいねした投稿一覧</h2>
+<% @user.liked_tweets.each do |t| %>
+  <%= t.user.name %>
+  <%= t.body %>
+<% end %>
+
+<%= link_to "Tweet一覧に戻る", tweets_path %>
+
+<h1>DMサンプル</h1>
+<h2>User一覧ページ</h2>
+
+<% if user_signed_in? %>
+    <h2><%= current_user.email %>でログインしています</h2> 
+    <%= link_to "SignOut", destroy_user_session_path, :method => :delete, class:"signOutButton" %>
+
+
+    <% number = 1%>
+    <div class="flex">
+    <div class="user-in">
+        <p>プロフィール</p>
+        <p><%= @user.email %>さん</p>
+        <% if @user.id != current_user.id %>
+            <p><%= link_to 'ユーザーページへ', user_path(@user.id) %></p>
+        <% end %>
+    </div>
+</div>
+
+<% else %>
+  <%= link_to "SignUp", new_user_registration_path %>
+  <br>
+  <%= link_to "SignIn", new_user_session_path %>
+<% end %>
+
+<style>
+.signOutButton{
+    text-decoration:none;
+    display:inline-block;
+    border:3px solid royalblue;
+    background-color:aliceblue;
+    padding:5px;
+}
+.flex{
+    display:flex;
+    flex-wrap:wrap;    
+}
+.user-in{
+    display:block;
+    width:300px;
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+    flex-shrink: 0;
+}
+</style>
+
+<h1>ユーザー詳細ページ</h1>
+
+<div class="user-in">
+<h2><%= @user.email %></h2>
+
+<% if @user.id == current_user.id %>
+    <%= @msg %>
+<% else %>
+    <% if @isRoom == true %>
+        <p><%= link_to 'DMへ', room_path(@roomId) %></p>
+    <% else %>
+        <%= form_for @room do |f| %>
+            <%= fields_for @entry do |e|%>
+                <% e.hidden_field :user_id, value: @user.id %>
+            <% end %>
+        <%= f.submit "DMを開始する"%>
+        <% end %>
+    <% end %>
+<% end %>
+</div>
+
+
+<%= link_to "ユーザー一覧に戻る", users_path %>
+
+
+
+<style>
+.user-in{
+    width:300px;
+    padding:10px;
+    margin:10px;
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+}
+</style>
+
+<div class="user-in">
+<% if @entries.present? %>
+  <% @entries.each do |e| %>
+      <h3><strong><a href="/users/<%= e.user.id %>"><%= e.user.email%></a></strong></h3>
+  <% end %>
+  <p>2人のDM:ハート:</p>
+<% else %>
+  <p>まだDMがありません</p>
+<% end %>
+</div>
+
+<div class="dmMain">
+    <% if @messages.present? %>
+        <% @messages.each do |m| %>
+            <strong><%= m.body %></strong>
+            <small><%= m.user.email %>さん</small><hr>
+        <% end %>
+    <% else %>
+        <p>まだメッセージがありません</p>
+    <% end %>
+
+    <% if @isRoom %>
+        <%= form_for @message do |f| %>
+        <%= f.text_field :body, :placeholder => "メッセージを入力して下さい" , :size => 100 %>
+        <%= f.hidden_field :room_id, :value => @roomId %>
+        <br>
+        <%= f.submit "送信する" %>
+        <% end %>
+    <% end %>
+</div>
+
+<%= link_to "ユーザー一覧に戻る", users_path %>
+
+
+<style>
+.user-in{
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+}
+.dmMain{
+    padding:30px;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+}
+</style>

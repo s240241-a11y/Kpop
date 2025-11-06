@@ -1,0 +1,38 @@
+<h1>Tweets#new</h1>
+<p>Find me in app/views/tweets/new.html.erb</p>
+
+<h1>KPOPファン交流サイト</h1>
+<h3>新規投稿ページ</h3>
+<%= form_for @tweet do |f| %>
+
+  <div class="field">
+    <%= f.label :content, "投稿内容" %>
+    <%= f.text_area :content, :size => "50x5" %>
+  </div>
+
+  <div class="field">
+  <%= f.label :kpop, "KPOPグループ" %>
+  <%= f.select :kpop,
+    options_for_select([["BTS", "BTS"],
+                        ["TWICE", "TWICE"],
+                        ["IVE", "IVE"],
+                        ["aespa", "aespa"],
+                        ["BABYMONSTER", "BABYMONSTER"],
+                        ["BOYNEXTDOOR", "BOYNEXTDOOR"]]) %>
+</div>
+
+ <div class="field">
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+  </div>
+  <%= f.submit "投稿する" %>
+<% end %>
+
+ <%= form_for @tweet do |f| %>
+   <%= f.label :content,"内容" %>
+   <%= f.text_field :content %>
+   <%= f.select :category, [["BTS"], ["TWICE"], ["IVE"], ["aespa"], ["BABYMONSTER"], ["BOYNEXTDOOR"]], include_blank: "どの投稿？" %>
+   <%= f.submit "投稿する" %>
+  <% end %>
+
+<%= link_to "一覧に戻る", tweets_path %>
