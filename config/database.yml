@@ -6,7 +6,11 @@
 #
 default: &default
 # adapter: sqlite3
-  
+  encoding: unicode
+  username: postgres # 追加
+  password: postgres # 追加
+  host: localhost # 追加
+  port: 5432 
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
