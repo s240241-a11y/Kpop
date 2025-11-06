@@ -23,8 +23,5 @@ test:
   database: storage/test.sqlite3
 
 production:
-  <<: *default
-  adapter: sqlite3
-  encoding: unicode 
-  url: <%= ENV["DATABASE_URL"] %> 
-  database: storage/production.sqlite3
+ <<: *default
+ url: <%= ENV['DATABASE_URL'] %>
