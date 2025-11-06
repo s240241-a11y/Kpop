@@ -5,7 +5,12 @@
 #   gem "sqlite3"
 #
 default: &default
-  #adapter: sqlite3
+  adapter: postgresql
+  encoding: unicode
+  username: postgres # 追加
+  password: postgres # 追加
+  host: localhost # 追加
+  port: 5432 # 追加
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
@@ -23,5 +28,8 @@ test:
   database: storage/test.sqlite3
 
 production:
- <<: *default
- url: <%= ENV['DATABASE_URL'] %>
+  <<: *default
+  adapter: sqlite3
+  encoding: unicode 
+  url: <%= ENV["DATABASE_URL"] %> 
+  database: storage/production.sqlite3
